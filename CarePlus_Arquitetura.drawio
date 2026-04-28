@@ -1,0 +1,189 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/25.0.2 Chrome/128.0.6613.186 Electron/32.2.5 Safari/537.36" version="25.0.2">
+  <diagram name="Care Plus — Arquitetura" id="careplus-arch-001">
+    <mxGraphModel dx="1727" dy="538" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- CAMADA 1 — EDGE                           -->
+        <!-- ══════════════════════════════════════════ -->
+        <mxCell id="layer-edge-bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="1080" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="layer-edge-title" value="&lt;b&gt;Camada Edge&lt;/b&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="55" y="48" width="200" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="layer-edge-subtitle" value="ESP32 + sensores — processamento local" style="text;html=1;align=left;verticalAlign=middle;resizable=0;strokeColor=none;fillColor=none;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="55" y="68" width="320" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- DHT22 -->
+        <mxCell id="dht22" value="&lt;b&gt;DHT22&lt;/b&gt;&lt;br&gt;Temp · Umidade" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="100" width="150" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ESP32 -->
+        <mxCell id="esp32" value="&lt;b&gt;ESP32&lt;/b&gt;&lt;br&gt;Classifica BPM · SpO2 · Estado" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="310" y="100" width="200" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- OLED -->
+        <mxCell id="oled" value="&lt;b&gt;OLED 128x64&lt;/b&gt;&lt;br&gt;Display local" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="600" y="100" width="160" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- LED -->
+        <mxCell id="led" value="&lt;b&gt;LED GPIO 2&lt;/b&gt;&lt;br&gt;Cmd on · off" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="850" y="100" width="160" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- DHT22 → ESP32 -->
+        <mxCell id="e-dht-esp" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;orthogonalLoop=1;jettySize=auto;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#b85450;" edge="1" source="dht22" target="esp32" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ESP32 → OLED -->
+        <mxCell id="e-esp-oled" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;orthogonalLoop=1;jettySize=auto;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#b85450;" edge="1" source="esp32" target="oled" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ESP32 → LED -->
+        <mxCell id="e-esp-led" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;orthogonalLoop=1;jettySize=auto;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#b85450;" edge="1" source="esp32" target="led" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- SETA EDGE ↔ MQTT                          -->
+        <!-- ══════════════════════════════════════════ -->
+        <mxCell id="e-edge-mqtt-pub" value="UltraLight 2.0&lt;br&gt;/TEF/lamp003/attrs" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;endArrow=block;endFill=1;startArrow=none;strokeWidth=2;strokeColor=#b85450;fontSize=11;align=center;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="410" y="200" as="sourcePoint" />
+            <mxPoint x="410" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-mqtt-edge-cmd" value="/TEF/lamp003/cmd" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;endArrow=block;endFill=0;startArrow=block;startFill=0;strokeWidth=2;strokeColor=#9673a6;dashed=1;dashPattern=5 5;fontSize=11;align=center;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="560" y="280" as="sourcePoint" />
+            <mxPoint x="560" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- CAMADA 2 — MQTT                           -->
+        <!-- ══════════════════════════════════════════ -->
+        <mxCell id="layer-mqtt-bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="1080" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="layer-mqtt-title" value="&lt;b&gt;Camada MQTT&lt;/b&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="55" y="288" width="200" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="layer-mqtt-subtitle" value="Transporte de mensagens assíncrono · port 1883" style="text;html=1;align=left;verticalAlign=middle;resizable=0;strokeColor=none;fillColor=none;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="55" y="308" width="380" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Broker Mosquitto -->
+        <mxCell id="mosquitto" value="&lt;b&gt;Broker Mosquitto&lt;/b&gt;&lt;br&gt;34.135.50.230:1883" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="330" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Tópico Publish -->
+        <mxCell id="topic-pub" value="&lt;b&gt;Tópico publish&lt;/b&gt;&lt;br&gt;/TEF/lamp003/attrs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="380" y="330" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Tópico Subscribe -->
+        <mxCell id="topic-sub" value="&lt;b&gt;Tópico subscribe&lt;/b&gt;&lt;br&gt;/TEF/lamp003/cmd" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="700" y="330" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- SETA MQTT ↔ BACK-END                      -->
+        <!-- ══════════════════════════════════════════ -->
+        <mxCell id="e-mqtt-backend" value="Northbound · HTTP ingest · port 4041" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;endArrow=block;endFill=1;startArrow=none;strokeWidth=2;strokeColor=#006666;fontSize=11;align=center;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="460" y="420" as="sourcePoint" />
+            <mxPoint x="460" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- CAMADA 3 — BACK-END FIWARE                -->
+        <!-- ══════════════════════════════════════════ -->
+        <mxCell id="layer-backend-bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="500" width="1080" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="layer-backend-title" value="&lt;b&gt;Camada Back-end — FIWARE&lt;/b&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="55" y="508" width="360" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="layer-backend-subtitle" value="IoT Agent · Orion Context Broker · MongoDB" style="text;html=1;align=left;verticalAlign=middle;resizable=0;strokeColor=none;fillColor=none;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="55" y="528" width="400" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- IoT Agent -->
+        <mxCell id="iot-agent" value="&lt;b&gt;IoT Agent MQTT&lt;/b&gt;&lt;br&gt;UltraLight 2.0&lt;br&gt;port 4041" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#6c8ebf;fontColor=#333333;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="560" width="200" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Orion CB -->
+        <mxCell id="orion" value="&lt;b&gt;Orion Context Broker&lt;/b&gt;&lt;br&gt;NGSIv2 REST API&lt;br&gt;port 1026" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#6c8ebf;fontColor=#333333;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="420" y="560" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- MongoDB -->
+        <mxCell id="mongodb" value="&lt;b&gt;MongoDB&lt;/b&gt;&lt;br&gt;Persistência de entidades&lt;br&gt;e contexto" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#6c8ebf;fontColor=#333333;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="790" y="560" width="200" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- IoT Agent → Orion -->
+        <mxCell id="e-iot-orion" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#6c8ebf;" edge="1" source="iot-agent" target="orion" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Orion → MongoDB -->
+        <mxCell id="e-orion-mongo" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#6c8ebf;" edge="1" source="orion" target="mongodb" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- SETA BACK-END ↔ APPLICATION               -->
+        <!-- ══════════════════════════════════════════ -->
+        <mxCell id="e-backend-app" value="GET /v2/entities · PATCH /v2/entities/{id}/attrs" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;endArrow=block;endFill=1;startArrow=block;startFill=0;strokeWidth=2;strokeColor=#006666;dashed=1;dashPattern=5 5;fontSize=11;align=center;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530" y="680" as="sourcePoint" />
+            <mxPoint x="530" y="760" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- CAMADA 4 — APPLICATION                    -->
+        <!-- ══════════════════════════════════════════ -->
+        <mxCell id="layer-app-bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="760" width="1080" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="layer-app-title" value="&lt;b&gt;Camada Application&lt;/b&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="55" y="768" width="260" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="layer-app-subtitle" value="Consumo da API REST NGSIv2" style="text;html=1;align=left;verticalAlign=middle;resizable=0;strokeColor=none;fillColor=none;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="55" y="788" width="340" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Dashboard / Postman -->
+        <mxCell id="dashboard" value="&lt;b&gt;Dashboard / Postman&lt;/b&gt;&lt;br&gt;Visualização em tempo real" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#82b366;fontColor=#333333;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="820" width="220" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Alertas -->
+        <mxCell id="alertas" value="&lt;b&gt;Alertas / Notificações&lt;/b&gt;&lt;br&gt;BPM · SpO2 · Estado crítico" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#82b366;fontColor=#333333;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="430" y="820" width="220" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Prontuário / Integração -->
+        <mxCell id="prontuario" value="&lt;b&gt;Prontuário / Integração&lt;/b&gt;&lt;br&gt;Sistemas externos" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#82b366;fontColor=#333333;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="790" y="820" width="220" height="60" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
