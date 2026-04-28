@@ -3,10 +3,14 @@
 > Sistema de monitoramento de sinais vitais em tempo real utilizando ESP32, sensor DHT22, protocolo MQTT e stack FIWARE na nuvem.
 
 ---
+
 ## Integrantes
-Murilo Jeronimo Ferreira Nunes RM560641
-Bruno Santos Castilho RM566799
-Vinicius Kozonoe Guaglini RM567264
+
+- Murilo Jeronimo Ferreira Nunes — RM560641
+- Bruno Santos Castilho — RM566799
+- Vinicius Kozonoe Guaglini — RM567264
+
+---
 
 ## 📋 Sumário
 
@@ -26,11 +30,16 @@ Vinicius Kozonoe Guaglini RM567264
 
 ## Visão Geral
 
-O **Care Plus** é um sistema IoT voltado para monitoramento de saúde em ambientes hospitalares ou domiciliares. Um dispositivo **ESP32** coleta dados de temperatura e umidade via sensor **DHT22** e, a partir dessas leituras, simula métricas vitais como **BPM (batimentos cardíacos)** e **SpO2 (saturação de oxigênio)**.
+O **Care Plus** é um sistema IoT voltado para monitoramento de saúde em ambientes hospitalares ou domiciliares.
 
-Os dados são publicados via **MQTT** em tópicos específicos e processados pela stack **FIWARE** (IoT Agent + Orion Context Broker), tornando as informações disponíveis via **API REST NGSIv2** para qualquer aplicação.
+Um dispositivo **ESP32** coleta dados de temperatura e umidade via sensor **DHT22** e, a partir dessas leituras, simula métricas vitais como:
 
-O dispositivo também classifica automaticamente o estado de saúde em **4 níveis** e exibe os dados em tempo real num **display OLED 128x64**, além de aceitar comandos remotos para ligar/desligar um LED indicador.
+- BPM (batimentos cardíacos)
+- SpO2 (saturação de oxigênio)
+
+Os dados são publicados via **MQTT** em tópicos específicos e processados pela stack **FIWARE** (IoT Agent + Orion Context Broker), tornando as informações disponíveis via **API REST NGSIv2**.
+
+O dispositivo também classifica automaticamente o estado de saúde em **4 níveis** e exibe os dados em tempo real em um display OLED 128x64.
 
 ---
 
@@ -38,21 +47,20 @@ O dispositivo também classifica automaticamente o estado de saúde em **4 níve
 
 O sistema é organizado em **4 camadas**:
 
-```txt
 ![Arquitetura IOT Care Plus](image.png)
-```
 
 > O arquivo `CarePlus_Arquitetura.drawio` contém o diagrama completo editável. Abra com https://app.diagrams.net/
 
+---
 
 ## Hardware Utilizado
 
 | Componente | Função |
 |---|---|
-| **ESP32** | Microcontrolador principal |
-| **DHT22** | Sensor de temperatura e umidade (GPIO 15) |
-| **OLED SSD1306 128x64** | Display local de sinais vitais (I2C: SDA 21 / SCL 22) |
-| **LED** | Indicador de status remoto (GPIO 2) |
+| ESP32 | Microcontrolador principal |
+| DHT22 | Sensor de temperatura e umidade |
+| OLED SSD1306 128x64 | Display de sinais vitais |
+| LED GPIO 2 | Indicador remoto |
 
 ---
 
@@ -61,21 +69,16 @@ O sistema é organizado em **4 camadas**:
 | Camada | Tecnologia |
 |---|---|
 | Firmware | C++ (Arduino / ESP-IDF) |
-| Conectividade | Wi-Fi 2.4 GHz |
-| Protocolo IoT | MQTT (PubSubClient) |
-| Payload | **UltraLight 2.0** |
-| Broker | Mosquitto · `34.135.50.230:1883` |
-| IoT Agent | FIWARE IoT Agent MQTT · porta `4041` |
-| Context Broker | FIWARE Orion · porta `1026` |
-| API | **NGSIv2 REST** |
+| Comunicação | MQTT |
+| Broker | Mosquitto |
+| Backend | FIWARE |
 | Banco de Dados | MongoDB |
-| Simulador | Wokwi (Wi-Fi SSID: `Wokwi-GUEST`) |
+| API | NGSIv2 REST |
+| Simulação | Wokwi |
 
 ---
 
 ## Classificação de Saúde
-
-O firmware classifica automaticamente o estado do paciente com base nas leituras simuladas:
 
 ### BPM
 
@@ -95,27 +98,25 @@ O firmware classifica automaticamente o estado do paciente com base nas leituras
 | 🟠 Alerta | 85 – 89% |
 | 🔴 Crítico | < 85% |
 
-O estado final publicado é sempre o **pior** entre BPM e SpO2. O campo `alerta` indica a causa: `OK`, `BPM`, `SPO2` ou `BPM+SPO2`.
-
 ---
 
 ## Tópicos MQTT
 
-| Direção | Tópico | Conteúdo |
-|---|---|---|
-| Publish | `/TEF/lamp003/attrs` | Payload UltraLight completo |
-| Publish | `/TEF/lamp003/attrs/bpm` | BPM (retained) |
-| Publish | `/TEF/lamp003/attrs/spo2` | SpO2 (retained) |
-| Publish | `/TEF/lamp003/attrs/sensor` | JSON com todos os campos |
-| Subscribe | `/TEF/lamp003/cmd` | Comandos `on` / `off` |
+| Direção | Tópico |
+|---|---|
+| Publish | `/TEF/lamp003/attrs` |
+| Publish | `/TEF/lamp003/attrs/bpm` |
+| Publish | `/TEF/lamp003/attrs/spo2` |
+| Publish | `/TEF/lamp003/attrs/sensor` |
+| Subscribe | `/TEF/lamp003/cmd` |
 
-### Exemplo de payload UltraLight
+### Exemplo Payload UltraLight
 
-```
+```txt
 s|on|bpm|82|spo2|97|temp|28.5|umid|63.2
 ```
 
-### Exemplo de payload JSON (tópico sensor)
+### Exemplo Payload JSON
 
 ```json
 {
@@ -132,9 +133,9 @@ s|on|bpm|82|spo2|97|temp|28.5|umid|63.2
 
 ## Configuração FIWARE
 
-### Variáveis de ambiente
+### Variáveis
 
-```
+```env
 BROKER_IP   = 34.135.50.230
 MQTT_PORT   = 1883
 IOT_PORT    = 4041
@@ -146,112 +147,88 @@ SERVICE     = smart
 SERVICEPATH = /
 ```
 
-### Atributos provisionados no dispositivo
-
-| object_id | name | type |
-|---|---|---|
-| `s` | state | Text |
-| `bpm` | bpm | Integer |
-| `spo2` | spo2 | Integer |
-| `temp` | temperature | Float |
-| `umid` | humidity | Float |
-
-### Comandos registrados
-
-| Comando | Ação |
-|---|---|
-| `on` | Liga o LED (GPIO 2) |
-| `off` | Desliga o LED (GPIO 2) |
-
 ---
 
 ## Como Executar
 
-### 1. Pré-requisitos
+### 1. Instalar dependências
 
-- [Arduino IDE](https://www.arduino.cc/en/software) ou [PlatformIO](https://platformio.org/)
-- Bibliotecas necessárias:
-  - `WiFi.h`
-  - `PubSubClient`
-  - `DHT sensor library`
-  - `Adafruit GFX Library`
-  - `Adafruit SSD1306`
-- Stack FIWARE rodando (IoT Agent + Orion + MongoDB + Mosquitto)
-- Opcional: [Wokwi](https://wokwi.com/) para simulação
+- WiFi.h
+- PubSubClient
+- DHT sensor library
+- Adafruit GFX
+- Adafruit SSD1306
 
-### 2. Configurar o firmware
+---
 
-Edite as constantes no topo do arquivo `.ino`:
+### 2. Configurar firmware
 
 ```cpp
 const char* SSID        = "SUA_REDE";
 const char* PASSWORD    = "SUA_SENHA";
+
 const char* BROKER_MQTT = "34.135.50.230";
 const int   BROKER_PORT = 1883;
 ```
 
-### 3. Fazer upload
+---
 
-Conecte o ESP32, selecione a porta correta na IDE e faça o upload. O display OLED exibirá `CARE PLUS` na inicialização e, em seguida, as leituras em tempo real.
+### 3. Upload para ESP32
+
+Conecte o ESP32 e faça upload do firmware.
 
 ---
 
 ## Sequência de Deploy
 
-Execute as requisições nesta ordem via Postman (collection `CarePlus_FIWARE_lamp003.postman_collection.json`):
-
-```
-1.  IoT Agent → Health Check IoT Agent         (GET  :4041/iot/about)
-2.  Orion CB  → Versão do Orion                (GET  :1026/version)
-3.  IoT Agent → Provisionar Service Group      (POST :4041/iot/services)
-4.  IoT Agent → Provisionar Dispositivo lamp003(POST :4041/iot/devices)
-5.  IoT Agent → Registrar Comandos lamp003     (POST :1026/v2/registrations)
-6.  IoT Agent → Listar Todos os Dispositivos   (GET  :4041/iot/devices)
-7.  Orion CB  → Listar Entidades               (GET  :1026/v2/entities)
-──────────────────────────────────────────────
-     ✅ Ligue o ESP32 e verifique a telemetria
-──────────────────────────────────────────────
-8.  IoT Agent → Ligar LED (on)                 (PATCH:1026/v2/entities/.../attrs)
-9.  IoT Agent → Consultar Estado lamp003        (GET  :1026/v2/entities/urn:ngsi-ld:Lamp:003)
+```txt
+1. Health Check IoT Agent
+2. Verificar Orion
+3. Provisionar Service Group
+4. Provisionar dispositivo
+5. Registrar comandos
+6. Listar dispositivos
+7. Listar entidades
+8. Ligar ESP32
+9. Testar comandos ON/OFF
 ```
 
 ---
 
 ## Endpoints da API
 
-Base URL: `http://34.135.50.230`
+Base URL:
 
-Headers obrigatórios em todas as requisições:
+```txt
+http://34.135.50.230
 ```
-fiware-service:     smart
+
+Headers:
+
+```txt
+fiware-service: smart
 fiware-servicepath: /
 ```
 
-| Método | Endpoint | Descrição |
-|---|---|---|
-| GET | `:4041/iot/about` | Health check IoT Agent |
-| POST | `:4041/iot/services` | Provisionar service group |
-| GET | `:4041/iot/services` | Listar service groups |
-| DELETE | `:4041/iot/services/?resource=&apikey=TEF` | Remover service group |
-| POST | `:4041/iot/devices` | Provisionar dispositivo |
-| GET | `:4041/iot/devices` | Listar dispositivos |
-| GET | `:1026/version` | Versão do Orion |
-| GET | `:1026/v2/entities` | Listar entidades |
-| GET | `:1026/v2/entities/urn:ngsi-ld:Lamp:003` | Consultar lamp003 |
-| PATCH | `:1026/v2/entities/urn:ngsi-ld:Lamp:003/attrs` | Enviar comando on/off |
-| POST | `:1026/v2/registrations` | Registrar comandos |
+| Método | Endpoint |
+|---|---|
+| GET | :4041/iot/about |
+| POST | :4041/iot/services |
+| POST | :4041/iot/devices |
+| GET | :1026/v2/entities |
 
 ---
 
 ## Estrutura do Projeto
 
-```
+```txt
 care-plus/
 ├── firmware/
-│   └── care_plus.ino               # Código principal ESP32
+│   └── care_plus.ino
 ├── docs/
-│   ├── CarePlus_Arquitetura.drawio # Diagrama de arquitetura (draw.io)
-│   └── README.md                   # Este arquivo
+│   ├── CarePlus_Arquitetura.drawio
+│   ├── image.png
+│   └── README.md
 └── postman/
     └── CarePlus_FIWARE_lamp003.postman_collection.json
 ```
