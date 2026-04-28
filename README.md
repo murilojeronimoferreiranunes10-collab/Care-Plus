@@ -38,7 +38,7 @@ O dispositivo também classifica automaticamente o estado de saúde em **4 níve
 
 O sistema é organizado em **4 camadas**:
 
-```
+```txt
 ┌─────────────────────────────────────────────────────────┐
 │                    CAMADA EDGE                          │
 │   DHT22 ──► ESP32 (classifica) ──► OLED / LED GPIO 2   │
@@ -63,8 +63,13 @@ O sistema é organizado em **4 camadas**:
 └─────────────────────────────────────────────────────────┘
 ```
 
-> O arquivo `CarePlus_Arquitetura.drawio` contém o diagrama completo editável. Abra com [draw.io](https://app.diagrams.net/).
+> O arquivo `CarePlus_Arquitetura.drawio` contém o diagrama completo editável. Abra com https://app.diagrams.net/
 
+### Trecho interno do diagrama (.drawio)
+
+```xml
+<mxPoint x="530" y="760" as="targetPoint" />
+```
 ---
 
 ## Hardware Utilizado
@@ -277,9 +282,3 @@ care-plus/
 └── postman/
     └── CarePlus_FIWARE_lamp003.postman_collection.json
 ```
-
----
-
-## Licença
-
-Projeto acadêmico — FIAP · Internet das Coisas.
